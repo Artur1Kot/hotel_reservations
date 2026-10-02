@@ -6,14 +6,34 @@ router = APIRouter(prefix="/hotels", tags=["Отели"])
 
 hotels = [
     {"id": 1, "title": "Сочи", "name": "sochi"},
-    {"id": 2, "title": "Дубай", "name": "dubai"}
+    {"id": 2, "title": "Дубай", "name": "dubai"},
+    {"id": 3, "title": "Москва", "name": "moscow"},
+    {"id": 4, "title": "Санкт-Петербург", "name": "spb"},
+    {"id": 5, "title": "Казань", "name": "kazan"},
+    {"id": 6, "title": "Екатеринбург", "name": "ekb"},
+    {"id": 7, "title": "Новосибирск", "name": "novosibirsk"},
+    {"id": 8, "title": "Краснодар", "name": "krasnodar"},
+    {"id": 9, "title": "Калининград", "name": "kaliningrad"},
+    {"id": 10, "title": "Владивосток", "name": "vladivostok"},
+    {"id": 11, "title": "Париж", "name": "paris"},
+    {"id": 12, "title": "Лондон", "name": "london"},
+    {"id": 13, "title": "Нью-Йорк", "name": "newyork"},
+    {"id": 14, "title": "Токио", "name": "tokyo"},
+    {"id": 15, "title": "Барселона", "name": "barcelona"},
+    {"id": 16, "title": "Рим", "name": "rome"},
+    {"id": 17, "title": "Берлин", "name": "berlin"},
+    {"id": 18, "title": "Амстердам", "name": "amsterdam"},
+    {"id": 19, "title": "Стамбул", "name": "istanbul"},
+    {"id": 20, "title": "Дубай Марина", "name": "dubai_marina"},
 ]
 
 
 @router.get("", summary="Получение отеля")
 def get_hotels(
         title: str | None = Query(None, description="Название отеля"),
-        id: int | None = Query(None, description="id отеля")
+        id: int | None = Query(None, description="id отеля"),
+        page: int | None = Query(default=1, description="номер страницы"),
+        per_page: int | None = Query(default=4, description="количество отелей на странице")
 ):
     hotels_ =[]
     for hotel in hotels:
@@ -22,7 +42,9 @@ def get_hotels(
         elif title and hotel["title"] != title:
             continue
         hotels_.append(hotel)
-    return hotels_
+    start = (page - 1) * per_page
+    end = start + per_page
+    return hotels_[start:end]
 
 
 @router.delete("/{hotel_id}", summary="Удаление отеля")
